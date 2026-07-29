@@ -1,0 +1,176 @@
+{
+  "profile": {
+    "title": "Profaayilii",
+    "edit_profile": "Profaayilii Sirreessi",
+    "language": "Afaan",
+    "logout": "Bahi",
+    "role": "Gahee",
+    "name_label": "Maqaa",
+    "phone_label": "Bilbila",
+    "save": "Qusadhu",
+    "cancel": "Haqi",
+    "validation_name_empty": "Maqaan duwwa ta'uu hin qabu",
+    "success_updated": "Profaayiliin fooyya'eera",
+    "error_update_failed": "Profaayilii fooyyessuu hin dandeenye"
+  },
+  "notifications": {
+    "title": "Beeksisoota",
+    "mark_all_read": "Hunda Akka Dubbifatameetti Mallatteessi",
+    "empty": "Beeksisni hin jiru."
+  },
+  "common": {
+    "loading": "Fe'amaa jira...",
+    "error": "Dogoggorri uumameera",
+    "retry": "Irra deebi'i yaali",
+    "cancel": "Haqi",
+    "delete": "Haqi",
+    "unknown": "Hin beekamne",
+    "etb": "ETB",
+    "confirm": "Mirkaneessi",
+    "save": "Olkaa'i",
+    "validation": "Mirkaneessa",
+    "success": "Milkaa'ee"
+  },
+  "auth": {
+    "login_title": "Farmers Marketplace",
+    "email": "Imeeylii",
+    "password": "Jecha iccitii",
+    "login": "Seeni",
+    "register_link": "Akkaawuntii hin qabduu? Asirratti galmeessi",
+    "register_title": "Akkaawuntii Uumi",
+    "full_name": "Maqaa Guutuu",
+    "phone_number": "Lakkoofsa Bilbilaa",
+    "i_am_a": "Ani:",
+    "buyer": "Bituu",
+    "farmer": "Qotee bulaa",
+    "register": "Galmeessi",
+    "login_link": "Akkaawuntii qabduu? Seeni",
+    "please_fill_fields": "Mee bakka barbaachisoo ta'ani guuti"
+  },
+  "home": {
+    "search_placeholder": "Oomishaalee barbaadi...",
+    "all": "Hunda",
+    "vegetables": "Kuduraalee",
+    "fruits": "Fuduraalee",
+    "grains": "Midhaan",
+    "livestock": "Horii",
+    "dairy": "Aannan"
+  },
+  "product": {
+    "no_image": "Suuraan hin jiru",
+    "description": "Ibsa",
+    "no_description": "Ibsni hin kennamne.",
+    "sold_by": "Gurguraa:",
+    "rating": "Sadarkaa",
+    "add_to_cart": "Gaarii Keessa Galchi",
+    "quantity": "Baay'ina",
+    "total": "Ida'ama"
+  },
+  "cart": {
+    "empty": "Gaariin kee duwwaadha.",
+    "subtotal": "Ida'ama:",
+    "proceed_checkout": "Kaffaltiitti Ce'i"
+  },
+  "checkout": {
+    "title": "Kaffaltii",
+    "delivery_address": "Teessoo Dhaabii",
+    "order_summary": "Cuunfaa Ajaja",
+    "items": "Wantoota:",
+    "total": "Ida'ama:",
+    "pay_chapa": "Chapa Cifraan Kaffali",
+    "enter_address": "Mee teessoo dhaabii galchi",
+    "cart_empty": "Gaariin kee duwwaadha",
+    "checkout_failed": "Kaffaltiin hin milkoofne:"
+  },
+  "order": {
+    "track_title": "Ajaja Hordofi",
+    "order_id": "Ajaja ID:",
+    "status": "Haala:",
+    "product_details": "Ibsa Oomishaa",
+    "no_id_provided": "ID ajajaa hin kennamne",
+    "fetch_failed": "Ajaja fiduu hin dandeenye",
+    "all": "Hunda",
+    "pending": "Eegaa jira",
+    "confirmed": "Mirkanaa'ee jira",
+    "shipped": "Ergamee jira",
+    "delivered": "Ga'eera",
+    "no_orders": "Ajajoonni hin argaman.",
+    "product": "Oomisha",
+    "track_order": "Ajaja Hordofi",
+    "update_status": "Haala Fooyyessi",
+    "status_update_failed": "Haala fooyyessuu hin dandeenye",
+    "order_prefix": "Ajaja:",
+    "buyer": "Bituu:",
+    "total_label": "Ida'ama:"
+  },
+  "farmer_dashboard": {
+    "title": "Dawwannoo",
+    "total_products": "Oomishaalee Walii Gala",
+    "pending_orders": "Ajajoota Eegaa Jiran",
+    "total_revenue": "Galii Walii Gala",
+    "unread_msgs": "Ergoota Hin Dubbifamne",
+    "add_product": "Oomisha Dabali",
+    "view_orders": "Ajajoota Ilaali",
+    "recent_orders": "Ajajoota Ammayyaa",
+    "no_orders": "Ajajoonni amma hin jiran.",
+    "order_prefix": "Ajaja #"
+  },
+  "my_products": {
+    "confirm_delete_title": "Mirkaneessi",
+    "confirm_delete_msg": "Oomisha kana haqi?",
+    "delete_failed": "Haquu hin dandeenye:",
+    "no_products": "Oomishaaleen hin argaman.",
+    "qty_label": "Baay'ina:"
+  },
+  "add_product": {
+    "edit_title": "Oomisha Sirreessi",
+    "add_title": "Oomisha Dabali",
+    "tap_select_image": "Suuraa filachuu tuqi",
+    "product_name": "Maqaa Oomishaa *",
+    "category": "Ramaddii",
+    "price": "Gatii (ETB) *",
+    "quantity": "Baay'ina *",
+    "description": "Ibsa",
+    "submit": "Oomisha Dhiyeessi",
+    "updated_success": "Oomishaan milkaa'inaan fooyya'eera!",
+    "added_success": "Oomishaan milkaa'inaan dabalamera!",
+    "save_failed": "Oomisha qusachuu hin dandeenye:"
+  },
+  "revenue": {
+    "title": "Galii",
+    "total_earnings": "Galii Walii Gala",
+    "history": "Seenaa Galii (Torban 4)",
+    "week_1": "Torban 1",
+    "week_2": "Torban 2",
+    "week_3": "Torban 3",
+    "week_4": "Torban 4",
+    "delivered_orders": "Ajajoota Ga'an",
+    "no_orders": "Ajajoonni xumuraman amma hin jiran."
+  },
+  "chat": {
+    "type_message": "Ergaa barreessi...",
+    "no_conversations": "Waliin mariin tokko illee hin jiru."
+  },
+  "splash": {
+    "app_title": "Farmers Marketplace"
+  },
+  "admin": {
+    "panel_title": "Mirkaneessaa Poolii",
+    "overview": "Shaakala",
+    "users": "Fayyadamaa",
+    "products": "Oomishaalee",
+    "total_users": "Fayyadamtoota Walii Gala",
+    "active": "Sochii qabu",
+    "deactivated": "Dhaabame",
+    "logout": "Bahi",
+    "deactivate_user_title": "Fayyadamaa Dhaabi",
+    "deactivate_user_msg": "{{name}} dhaabuu?",
+    "deactivate_failed": "Fayyadamaa dhaabuu hin dandeenye",
+    "delete_product_title": "Oomisha Haqi",
+    "delete_product_msg": "{{name}} haquu?",
+    "delete_failed": "Oomisha haquu hin dandeenye",
+    "farmer_label": "Qotee bulaa:",
+    "total_products": "Oomishaalee",
+    "deactivate": "Dhaabi"
+  }
+}

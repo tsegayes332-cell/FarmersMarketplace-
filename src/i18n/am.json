@@ -1,0 +1,176 @@
+{
+  "profile": {
+    "title": "መገለጫ",
+    "edit_profile": "መገለጫ ያርትዑ",
+    "language": "ቋንቋ",
+    "logout": "ውጣ",
+    "role": "ሚና",
+    "name_label": "ስም",
+    "phone_label": "ስልክ",
+    "save": "አስቀምጥ",
+    "cancel": "ሰርዝ",
+    "validation_name_empty": "ስም ባዶ መሆን አይችልም",
+    "success_updated": "መገለጫ ተሻሽሏል",
+    "error_update_failed": "መገለጫ ማሻሻል አልተሳካም"
+  },
+  "notifications": {
+    "title": "ማሳወቂያዎች",
+    "mark_all_read": "ሁሉንም አንብብ",
+    "empty": "ምንም ማሳወቂያዎች የሉም።"
+  },
+  "common": {
+    "loading": "በመጫን ላይ...",
+    "error": "ስህተት ተከስቷል",
+    "retry": "እንደገና ሞክር",
+    "cancel": "ሰርዝ",
+    "delete": "ሰርዝ",
+    "unknown": "ያልታወቀ",
+    "etb": "ETB",
+    "confirm": "አረጋግጥ",
+    "save": "አስቀምጥ",
+    "validation": "ማረጋገጫ",
+    "success": "ተሳክቷል"
+  },
+  "auth": {
+    "login_title": "Farmers Marketplace",
+    "email": "ኢሜይል",
+    "password": "የይለፍ ቃል",
+    "login": "ግባ",
+    "register_link": "መለያ የለዎትም? እዚህ ይመዝገቡ",
+    "register_title": "መለያ ይፍጠሩ",
+    "full_name": "ሙሉ ስም",
+    "phone_number": "ስልክ ቁጥር",
+    "i_am_a": "እኔ፡-",
+    "buyer": "ገዢ",
+    "farmer": "ገበሬ",
+    "register": "መዝገብ",
+    "login_link": "መለያ አለዎት? ይግቡ",
+    "please_fill_fields": "እባክዎ አስፈላጊ መስኮችን ይሙሉ"
+  },
+  "home": {
+    "search_placeholder": "ምርቶችን ይፈልጉ...",
+    "all": "ሁሉም",
+    "vegetables": "አትክልቶች",
+    "fruits": "ፍራፍሬዎች",
+    "grains": "እህሎች",
+    "livestock": "እንስሳት",
+    "dairy": "የወተት ተዋጽኦ"
+  },
+  "product": {
+    "no_image": "ምስል የለም",
+    "description": "መግለጫ",
+    "no_description": "ምንም መግለጫ አልተሰጠም።",
+    "sold_by": "ሸጪ፡",
+    "rating": "ደረጃ",
+    "add_to_cart": "ወደ ጋሪ ያስገቡ",
+    "quantity": "ብዛት",
+    "total": "ድምር"
+  },
+  "cart": {
+    "empty": "ጋሪዎ ባዶ ነው።",
+    "subtotal": "ድምር፡",
+    "proceed_checkout": "ወደ ክፍያ ይቀጥሉ"
+  },
+  "checkout": {
+    "title": "ክፍያ",
+    "delivery_address": "የመላኪያ አድራሻ",
+    "order_summary": "የትዕዛዝ ማጠቃለያ",
+    "items": "እቃዎች፡",
+    "total": "ድምር፡",
+    "pay_chapa": "በቻፓ ይክፈሉ",
+    "enter_address": "እባክዎ የመላኪያ አድራሻ ያስገቡ",
+    "cart_empty": "ጋሪዎ ባዶ ነው",
+    "checkout_failed": "ክፍያ አልተሳካም፡"
+  },
+  "order": {
+    "track_title": "ትዕዛዝ ይከታተሉ",
+    "order_id": "የትዕዛዝ መለያ፡",
+    "status": "ሁኔታ፡",
+    "product_details": "የምርት ዝርዝሮች",
+    "no_id_provided": "የትዕዛዝ መለያ አልተሰጠም",
+    "fetch_failed": "ትዕዛዝ ማምጣት አልተሳካም",
+    "all": "ሁሉም",
+    "pending": "በመጠባበቅ ላይ",
+    "confirmed": "ተረጋግጧል",
+    "shipped": "ተልኳል",
+    "delivered": "ደርሷል",
+    "no_orders": "ምንም ትዕዛዞች የሉም።",
+    "product": "ምርት",
+    "track_order": "ትዕዛዝ ይከታተሉ",
+    "update_status": "ሁኔታ ያዘምኑ",
+    "status_update_failed": "ሁኔታ ማዘመን አልተሳካም",
+    "order_prefix": "ትዕዛዝ፡",
+    "buyer": "ገዢ፡",
+    "total_label": "ድምር፡"
+  },
+  "farmer_dashboard": {
+    "title": "ዳሽቦርድ",
+    "total_products": "ጠቅላላ ምርቶች",
+    "pending_orders": "በመጠባበቅ ላይ ያሉ ትዕዛዞች",
+    "total_revenue": "ጠቅላላ ገቢ",
+    "unread_msgs": "ያልተነበቡ መልዕክቶች",
+    "add_product": "ምርት ያክሉ",
+    "view_orders": "ትዕዛዞችን ይመልከቱ",
+    "recent_orders": "የቅርብ ትዕዛዞች",
+    "no_orders": "ገና ትዕዛዞች የሉም።",
+    "order_prefix": "ትዕዛዝ #"
+  },
+  "my_products": {
+    "confirm_delete_title": "አረጋግጥ",
+    "confirm_delete_msg": "ይህን ምርት ይሰርዙ?",
+    "delete_failed": "መሰረዝ አልተሳካም፡",
+    "no_products": "ምንም ምርቶች የሉም።",
+    "qty_label": "ብዛት፡"
+  },
+  "add_product": {
+    "edit_title": "ምርት ያስተካክሉ",
+    "add_title": "ምርት ያክሉ",
+    "tap_select_image": "ምስል ለመምረጥ ይንኩ",
+    "product_name": "የምርት ስም *",
+    "category": "ምድብ",
+    "price": "ዋጋ (ETB) *",
+    "quantity": "ብዛት *",
+    "description": "መግለጫ",
+    "submit": "ምርት ያስገቡ",
+    "updated_success": "ምርት በተሳካ ሁኔታ ተሻሽሏል!",
+    "added_success": "ምርት በተሳካ ሁኔታ ተጨምሯል!",
+    "save_failed": "ምርት ማስቀመጥ አልተሳካም፡"
+  },
+  "revenue": {
+    "title": "ገቢ",
+    "total_earnings": "ጠቅላላ ገቢ",
+    "history": "የገቢ ታሪክ (4 ሳምንታት)",
+    "week_1": "ሳምንት 1",
+    "week_2": "ሳምንት 2",
+    "week_3": "ሳምንት 3",
+    "week_4": "ሳምንት 4",
+    "delivered_orders": "የደረሱ ትዕዛዞች",
+    "no_orders": "ገና የተጠናቀቁ ትዕዛዞች የሉም።"
+  },
+  "chat": {
+    "type_message": "መልዕክት ይጻፉ...",
+    "no_conversations": "ምንም ንቁ ውይይቶች የሉም።"
+  },
+  "splash": {
+    "app_title": "Farmers Marketplace"
+  },
+  "admin": {
+    "panel_title": "የአስተዳዳሪ ፓነል",
+    "overview": "አጠቃላይ እይታ",
+    "users": "ተጠቃሚዎች",
+    "products": "ምርቶች",
+    "total_users": "ጠቅላላ ተጠቃሚዎች",
+    "active": "ንቁ",
+    "deactivated": "ተዘግተዋል",
+    "logout": "ውጣ",
+    "deactivate_user_title": "ተጠቃሚ ያሰናክሉ",
+    "deactivate_user_msg": "{{name}} ያሰናክሉ?",
+    "deactivate_failed": "ተጠቃሚ ማሰናከል አልተሳካም",
+    "delete_product_title": "ምርት ይሰርዙ",
+    "delete_product_msg": "{{name}} ይሰርዙ?",
+    "delete_failed": "ምርት መሰረዝ አልተሳካም",
+    "farmer_label": "ገበሬ፡",
+    "total_products": "ምርቶች",
+    "deactivate": "አሰናክል"
+  }
+}
