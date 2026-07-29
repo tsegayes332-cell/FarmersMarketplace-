@@ -135,9 +135,24 @@ const chapaWebhook = async (req, res) => {
         });
       });
     } else {
-      await prisma.payment.updateMany({
-        where: { orderId: order.id, status: 'PENDING' },
-        data: { status: 'FAILED' }
+      await prisma.$transaction(async (tx) => {
+        await tx.payment.updateMany({
+          where: { orderId: order.id, status: 'PENDING' },
+          data: { status: 'FAILED' }
+        });
+
+        await tx.product.update({
+          where: { id: order.productId },
+          data: { quantity: { increment: order.quantity } }
+        });
+
+        await tx.notification.create({
+          data: {
+            userId: order.product.farmerId,
+            type: 'ORDER_UPDATE',
+            message: `Payment failed for order ${order.id}. Stock has been restored.`
+          }
+        });
       });
     }
 
