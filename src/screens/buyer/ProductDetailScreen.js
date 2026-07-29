@@ -51,7 +51,7 @@ export default function ProductDetailScreen({ route, navigation }) {
             <View style={styles.quantityRow}>
               <IconButton icon="minus" size={20} onPress={() => setQuantity(Math.max(1, quantity - 1))} />
               <Text variant="titleMedium">{quantity}</Text>
-              <IconButton icon="plus" size={20} onPress={() => setQuantity(quantity + 1)} />
+              <IconButton icon="plus" size={20} onPress={() => setQuantity(Math.min(product.quantity, quantity + 1))} />
             </View>
             <Button mode="contained" onPress={handleAddToCart} style={styles.addButton}>
               {t('product.add_to_cart')}

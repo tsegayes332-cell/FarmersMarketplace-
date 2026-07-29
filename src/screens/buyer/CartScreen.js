@@ -38,7 +38,9 @@ export default function CartScreen({ navigation }) {
           }} />
           <Text>{item.quantity}</Text>
           <IconButton icon="plus" size={16} onPress={() => {
-            dispatch(updateQuantity({ productId: item.product.id, quantity: item.quantity + 1 }));
+            if (item.quantity < item.product.quantity) {
+              dispatch(updateQuantity({ productId: item.product.id, quantity: item.quantity + 1 }));
+            }
           }} />
         </View>
       </View>
