@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -61,6 +62,12 @@ const transportRoutes = require('./src/routes/transportRoutes');
 // Basic Route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Farmers Marketplace API' });
+});
+
+// APK Download Route
+app.get('/apk-download', (req, res) => {
+  const apkPath = 'C:\\fmp\\FarmersMarketplace\\android\\app\\build\\outputs\\apk\\release\\app-release.apk';
+  res.download(apkPath, 'app-release.apk');
 });
 
 // Routes Registration

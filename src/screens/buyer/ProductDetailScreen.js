@@ -79,5 +79,5 @@ const styles = StyleSheet.create({
   actionBar: { flexDirection: 'row', padding: 10, marginTop: 20, alignItems: 'center', backgroundColor: '#fff', borderRadius: 8, elevation: 1 },
   quantityRow: { flexDirection: 'row', alignItems: 'center', marginRight: 15 },
   addButton: { flex: 1 },
-  fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 }
+  fab: { position: 'absolute', margin: 16, right: 0, bottom: 100 }
 });
