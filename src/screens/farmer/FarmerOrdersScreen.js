@@ -10,7 +10,7 @@ export default function FarmerOrdersScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { farmerOrders, isLoading, isUpdating, error } = useSelector(state => state.orders);
+  const { farmerOrders, isLoadingFarmerOrders, isUpdating, error } = useSelector(state => state.orders);
   const [filter, setFilter] = React.useState('ALL');
 
   useFocusEffect(
@@ -61,7 +61,7 @@ export default function FarmerOrdersScreen() {
         keyExtractor={item => item.id.toString()}
         refreshing={isLoading}
         onRefresh={() => dispatch(fetchFarmerOrders())}
-        ListEmptyComponent={isLoading ? <ActivityIndicator style={{marginTop: 50}} /> : <Text style={{textAlign: 'center', marginTop: 50}}>{t('order.no_orders')}</Text>}
+        ListEmptyComponent={isLoadingFarmerOrders ? <ActivityIndicator style={{marginTop: 50}} /> : <Text style={{textAlign: 'center', marginTop: 50}}>{t('order.no_orders')}</Text>}
         renderItem={({ item }) => (
           <Card style={styles.card}>
             <Card.Content>

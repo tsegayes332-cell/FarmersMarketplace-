@@ -38,39 +38,41 @@ const orderSlice = createSlice({
   initialState: {
     myOrders: [],
     farmerOrders: [],
-    isLoading: false,
+    isLoadingMyOrders: false,
+    isLoadingFarmerOrders: false,
+    isPlacingOrder: false,
     isUpdating: false,
     error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMyOrders.pending, (state) => { state.isLoading = true; })
+      .addCase(fetchMyOrders.pending, (state) => { state.isLoadingMyOrders = true; })
       .addCase(fetchMyOrders.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingMyOrders = false;
         state.myOrders = action.payload;
       })
       .addCase(fetchMyOrders.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingMyOrders = false;
         state.error = action.payload;
       })
-      .addCase(fetchFarmerOrders.pending, (state) => { state.isLoading = true; })
+      .addCase(fetchFarmerOrders.pending, (state) => { state.isLoadingFarmerOrders = true; })
       .addCase(fetchFarmerOrders.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingFarmerOrders = false;
         state.farmerOrders = action.payload;
       })
       .addCase(fetchFarmerOrders.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingFarmerOrders = false;
         state.error = action.payload;
       })
-      .addCase(placeOrder.pending, (state) => { state.isLoading = true; })
+      .addCase(placeOrder.pending, (state) => { state.isPlacingOrder = true; })
       .addCase(placeOrder.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isPlacingOrder = false;
         const orders = Array.isArray(action.payload) ? action.payload : [action.payload];
         state.myOrders.unshift(...orders);
       })
       .addCase(placeOrder.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isPlacingOrder = false;
         state.error = action.payload;
       })
       .addCase(updateOrderStatus.pending, (state) => { state.isUpdating = true; })
