@@ -1,0 +1,163 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  FARMER
+  BUYER
+  TRANSPORTER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+}
+
+enum PaymentMethod {
+  TELEBIRR
+  CARD
+  CASH
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum TransportStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+}
+
+enum NotificationType {
+  ORDER_UPDATE
+  NEW_MESSAGE
+  PAYMENT_CONFIRMATION
+}
+
+enum NotificationStatus {
+  READ
+  UNREAD
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  role         Role
+  profileImage String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  products         Product[]
+  ordersBuyer      Order[]        @relation("BuyerOrders")
+  payments         Payment[]
+  transports       Transport[]
+  sentMessages     Message[]      @relation("SentMessages")
+  receivedMessages Message[]      @relation("ReceivedMessages")
+  reviewsGiven     Review[]       @relation("ReviewsGiven")
+  reviewsReceived  Review[]       @relation("ReviewsReceived")
+  notifications    Notification[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  farmerId    String
+  name        String
+  category    String
+  price       Decimal
+  quantity    Int
+  description String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+
+  farmer      User     @relation(fields: [farmerId], references: [id])
+  orders      Order[]
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  buyerId     String
+  productId   String
+  quantity    Int
+  totalPrice  Decimal
+  status      OrderStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+
+  buyer       User        @relation("BuyerOrders", fields: [buyerId], references: [id])
+  product     Product     @relation(fields: [productId], references: [id])
+  payments    Payment[]
+  transports  Transport[]
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  orderId   String
+  userId    String
+  amount    Decimal
+  method    PaymentMethod
+  status    PaymentStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+
+  order     Order         @relation(fields: [orderId], references: [id])
+  user      User          @relation(fields: [userId], references: [id])
+}
+
+model Transport {
+  id               String          @id @default(uuid())
+  orderId          String
+  transporterId    String
+  status           TransportStatus @default(PENDING)
+  estimatedArrival DateTime
+
+  order            Order           @relation(fields: [orderId], references: [id])
+  transporter      User            @relation(fields: [transporterId], references: [id])
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  timestamp  DateTime @default(now())
+
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  targetId  String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation("ReviewsGiven", fields: [userId], references: [id])
+  target    User     @relation("ReviewsReceived", fields: [targetId], references: [id])
+}
+
+model Notification {
+  id        String             @id @default(uuid())
+  userId    String
+  type      NotificationType
+  message   String
+  status    NotificationStatus @default(UNREAD)
+  createdAt DateTime           @default(now())
+
+  user      User               @relation(fields: [userId], references: [id])
+}
