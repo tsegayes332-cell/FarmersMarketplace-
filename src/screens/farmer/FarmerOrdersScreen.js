@@ -1,58 +1,41 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Card, Text, useTheme, Button, ActivityIndicator } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import apiClient from '../../api/apiClient';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchFarmerOrders, updateOrderStatus } from '../../store/slices/orderSlice';
 import { useTranslation } from 'react-i18next';
 
 export default function FarmerOrdersScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('ALL');
-  const [refreshing, setRefreshing] = useState(false);
-
-  const loadData = async () => {
-    try {
-      const res = await apiClient.get('/orders/farmer');
-      setOrders(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error('Failed to load farmer orders:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const dispatch = useDispatch();
+  const { farmerOrders, isLoading, isUpdating, error } = useSelector(state => state.orders);
+  const [filter, setFilter] = React.useState('ALL');
 
   useFocusEffect(
     useCallback(() => {
-      loadData();
-    }, [])
+      dispatch(fetchFarmerOrders());
+    }, [dispatch])
   );
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await loadData();
-    setRefreshing(false);
-  };
+  useEffect(() => {
+    if (error && !isUpdating) {
+      Alert.alert(t('order.status_update_failed'));
+    }
+  }, [error, isUpdating, t]);
 
-  const handleUpdateStatus = async (orderId, currentStatus) => {
+  const handleUpdateStatus = (orderId, currentStatus) => {
     const nextStatusMap = {
       'PENDING': 'CONFIRMED',
       'CONFIRMED': 'SHIPPED'
     };
     const nextStatus = nextStatusMap[currentStatus];
     if (!nextStatus) return;
-
-    try {
-      await apiClient.put(`/orders/${orderId}/status`, { status: nextStatus });
-      loadData();
-    } catch (error) {
-      alert(t('order.status_update_failed'));
-    }
+    dispatch(updateOrderStatus({ id: orderId, status: nextStatus }));
   };
 
-  const filteredOrders = filter === 'ALL' ? orders : orders.filter(o => o.status === filter);
+  const filteredOrders = filter === 'ALL' ? farmerOrders : farmerOrders.filter(o => o.status === filter);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -76,9 +59,9 @@ export default function FarmerOrdersScreen() {
       <FlatList
         data={filteredOrders}
         keyExtractor={item => item.id.toString()}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        ListEmptyComponent={loading ? <ActivityIndicator style={{marginTop: 50}} /> : <Text style={{textAlign: 'center', marginTop: 50}}>{t('order.no_orders')}</Text>}
+        refreshing={isLoading}
+        onRefresh={() => dispatch(fetchFarmerOrders())}
+        ListEmptyComponent={isLoading ? <ActivityIndicator style={{marginTop: 50}} /> : <Text style={{textAlign: 'center', marginTop: 50}}>{t('order.no_orders')}</Text>}
         renderItem={({ item }) => (
           <Card style={styles.card}>
             <Card.Content>
@@ -89,9 +72,9 @@ export default function FarmerOrdersScreen() {
                 {t('order.status')} {item.status}
               </Text>
             </Card.Content>
-            {item.status === 'PENDING' || item.status === 'CONFIRMED' ? (
+            {(item.status === 'PENDING' || item.status === 'CONFIRMED') ? (
               <Card.Actions>
-                <Button onPress={() => handleUpdateStatus(item.id, item.status)}>
+                <Button onPress={() => handleUpdateStatus(item.id, item.status)} loading={isUpdating}>
                   {t('order.update_status')}
                 </Button>
               </Card.Actions>
