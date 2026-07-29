@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, FlatList, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, TextInput, IconButton, useTheme, ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessages, addMessage } from '../../store/slices/messageSlice';
@@ -40,13 +40,8 @@ export default function ChatScreen({ route, navigation }) {
     loadHistory();
     joinRoom(partner.id);
 
-    onMessage((newMsg) => {
-      // If we receive a message that belongs to this conversation
-      if (newMsg.senderId === partner.id || newMsg.receiverId === partner.id) {
-        dispatch(addMessage({ partnerId: partner.id, message: newMsg }));
-      }
-    });
-
+    // No need for local onMessage — global handler in RootNavigator adds messages
+    return () => {};
   }, [partner.id]);
 
   const handleSend = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Image } from 'react-native';
-import { Text, Button, useTheme, IconButton } from 'react-native-paper';
+import { Text, Button, useTheme, IconButton, FAB } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/slices/cartSlice';
 import { useTranslation } from 'react-i18next';
@@ -45,9 +45,6 @@ export default function ProductDetailScreen({ route, navigation }) {
           <View style={styles.farmerInfo}>
             <Text variant="titleMedium">{t('product.sold_by')} {product.farmer?.name}</Text>
             <Text style={{ color: theme.colors.secondary }}>{product.averageRating ? `⭐ ${product.averageRating} ${t('product.rating')}` : ''}</Text>
-            <Button mode="text" onPress={() => navigation.navigate('ChatScreen', { partner: product.farmer })} style={{ marginTop: 10 }}>
-              Contact Farmer
-            </Button>
           </View>
 
           <View style={styles.actionBar}>
@@ -62,6 +59,14 @@ export default function ProductDetailScreen({ route, navigation }) {
           </View>
         </View>
       </ScrollView>
+
+      <FAB
+        icon="message-text"
+        label="Contact Farmer"
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+        color="#fff"
+        onPress={() => navigation.navigate('ChatScreen', { partner: product.farmer })}
+      />
     </View>
   );
 }
@@ -73,5 +78,6 @@ const styles = StyleSheet.create({
   farmerInfo: { marginTop: 20, padding: 15, backgroundColor: '#fff', borderRadius: 8, elevation: 1 },
   actionBar: { flexDirection: 'row', padding: 10, marginTop: 20, alignItems: 'center', backgroundColor: '#fff', borderRadius: 8, elevation: 1 },
   quantityRow: { flexDirection: 'row', alignItems: 'center', marginRight: 15 },
-  addButton: { flex: 1 }
+  addButton: { flex: 1 },
+  fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 }
 });

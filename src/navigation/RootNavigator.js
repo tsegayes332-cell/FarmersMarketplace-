@@ -10,12 +10,14 @@ import AdminNavigator from './AdminNavigator';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import useNotifications from '../hooks/useNotifications';
+import { useSocketGlobal } from '../hooks/useSocket';
 
 export default function RootNavigator() {
   const dispatch = useDispatch();
   const { user, token, isLoading } = useSelector((state) => state.auth);
 
   useNotifications();
+  useSocketGlobal();
 
   useEffect(() => {
     dispatch(loadUser());

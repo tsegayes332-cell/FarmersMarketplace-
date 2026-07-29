@@ -27,6 +27,12 @@ export const loginUser = createAsyncThunk('auth/login', async ({ email, password
     await Keychain.setGenericPassword(JSON.stringify(data.user), data.token);
     return data;
   } catch (error) {
+    if (error.code === 'ECONNABORTED') {
+      return rejectWithValue('Connection timed out. Check your network and ensure the server is running.');
+    }
+    if (!error.response) {
+      return rejectWithValue('Cannot reach the server. Make sure you are on the same WiFi as the laptop.');
+    }
     return rejectWithValue(error.response?.data?.error || 'Login failed');
   }
 });
@@ -37,6 +43,12 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, {
     await Keychain.setGenericPassword(JSON.stringify(data.user), data.token);
     return data;
   } catch (error) {
+    if (error.code === 'ECONNABORTED') {
+      return rejectWithValue('Connection timed out. Check your network.');
+    }
+    if (!error.response) {
+      return rejectWithValue('Cannot reach the server. Make sure you are on the same WiFi.');
+    }
     return rejectWithValue(error.response?.data?.error || 'Registration failed');
   }
 });

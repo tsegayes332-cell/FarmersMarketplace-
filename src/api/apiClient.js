@@ -12,6 +12,7 @@ export const BACKEND_URL = `http://${host}:5000`;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },

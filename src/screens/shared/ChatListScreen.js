@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Text, Avatar, useTheme, Badge, ActivityIndicator, Divider } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchConversations, markAsRead } from '../../store/slices/messageSlice';
 import { useTranslation } from 'react-i18next';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function ChatListScreen({ navigation }) {
   const { t } = useTranslation();
@@ -12,15 +13,20 @@ export default function ChatListScreen({ navigation }) {
   const { conversations } = useSelector(state => state.messages);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     await dispatch(fetchConversations());
     setLoading(false);
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
+
+  useEffect(() => {
+    if (isFocused) loadData();
+  }, [isFocused, loadData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
