@@ -39,7 +39,8 @@ const orderSlice = createSlice({
       .addCase(placeOrder.pending, (state) => { state.isLoading = true; })
       .addCase(placeOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.myOrders.unshift(action.payload);
+        const orders = Array.isArray(action.payload) ? action.payload : [action.payload];
+        state.myOrders.unshift(...orders);
       })
       .addCase(placeOrder.rejected, (state, action) => {
         state.isLoading = false;

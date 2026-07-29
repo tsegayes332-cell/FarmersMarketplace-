@@ -3,57 +3,64 @@ const { z } = require('zod');
 const prisma = new PrismaClient({});
 
 const placeOrderSchema = z.object({
-  productId: z.string().uuid(),
-  quantity: z.number().int().positive()
+  items: z.array(z.object({
+    productId: z.string().uuid(),
+    quantity: z.number().int().positive()
+  })).min(1),
+  address: z.string().optional()
 });
 
 const placeOrder = async (req, res) => {
   try {
     const validatedData = placeOrderSchema.parse(req.body);
-    const { productId, quantity } = validatedData;
+    const { items, address } = validatedData;
     const buyerId = req.user.id;
 
-    // We need to do this in a transaction to ensure atomicity
     const result = await prisma.$transaction(async (tx) => {
-      const product = await tx.product.findUnique({ where: { id: productId } });
+      const orders = [];
 
-      if (!product) {
-        throw new Error('Product not found');
+      for (const item of items) {
+        const { productId, quantity } = item;
+        const product = await tx.product.findUnique({ where: { id: productId } });
+
+        if (!product) {
+          throw new Error(`Product ${productId} not found`);
+        }
+
+        if (product.quantity < quantity) {
+          throw new Error(`Insufficient stock for ${product.name}`);
+        }
+
+        const totalPrice = Number(product.price) * quantity;
+
+        await tx.product.update({
+          where: { id: productId },
+          data: { quantity: product.quantity - quantity }
+        });
+
+        const order = await tx.order.create({
+          data: {
+            buyerId,
+            productId,
+            quantity,
+            totalPrice,
+            address,
+            status: 'PENDING'
+          }
+        });
+
+        await tx.notification.create({
+          data: {
+            userId: product.farmerId,
+            type: 'ORDER_UPDATE',
+            message: `New order received for ${quantity} of ${product.name}.`
+          }
+        });
+
+        orders.push(order);
       }
 
-      if (product.quantity < quantity) {
-        throw new Error('Insufficient stock');
-      }
-
-      const totalPrice = Number(product.price) * quantity;
-
-      // Reduce product quantity
-      await tx.product.update({
-        where: { id: productId },
-        data: { quantity: product.quantity - quantity }
-      });
-
-      // Create order
-      const order = await tx.order.create({
-        data: {
-          buyerId,
-          productId,
-          quantity,
-          totalPrice,
-          status: 'PENDING'
-        }
-      });
-
-      // Notify farmer
-      await tx.notification.create({
-        data: {
-          userId: product.farmerId,
-          type: 'ORDER_UPDATE',
-          message: `New order received for ${quantity} of ${product.name}.`
-        }
-      });
-
-      return order;
+      return orders;
     });
 
     res.status(201).json(result);
@@ -61,7 +68,7 @@ const placeOrder = async (req, res) => {
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: error.errors });
     }
-    if (error.message === 'Product not found' || error.message === 'Insufficient stock') {
+    if (error.message && (error.message.includes('not found') || error.message.includes('Insufficient'))) {
       return res.status(400).json({ error: error.message });
     }
     console.error(error);

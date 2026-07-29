@@ -96,6 +96,7 @@ model Order {
   quantity    Int
   totalPrice  Decimal
   status      OrderStatus @default(PENDING)
+  address     String?
   createdAt   DateTime    @default(now())
 
   buyer       User        @relation("BuyerOrders", fields: [buyerId], references: [id])

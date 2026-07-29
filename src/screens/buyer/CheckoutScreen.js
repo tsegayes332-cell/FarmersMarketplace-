@@ -35,14 +35,17 @@ export default function CheckoutScreen({ navigation }) {
         return;
       }
 
-      const firstItem = items[0];
-      const orderData = await dispatch(placeOrder({ 
-        productId: firstItem.product.id, 
-        quantity: firstItem.quantity,
+      const orderItems = items.map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity
+      }));
+
+      const orders = await dispatch(placeOrder({ 
+        items: orderItems,
         address
       })).unwrap();
 
-      const paymentData = await paymentService.initiatePayment(orderData.id);
+      const paymentData = await paymentService.initiatePayment(orders[0].id);
       setCheckoutUrl(paymentData.checkout_url);
     } catch (error) {
       alert(t('checkout.checkout_failed') + ' ' + (error.message || error));
@@ -52,11 +55,10 @@ export default function CheckoutScreen({ navigation }) {
   };
 
   const handleWebViewNavigation = (navState) => {
-    // If the URL matches our returnUrl or webhook URL, consider it successful
     if (navState.url.includes('orders/') || navState.url.includes('success')) {
       setCheckoutUrl(null);
       dispatch(clearCart());
-      navigation.navigate('OrderTracking'); // Go to tracking
+      navigation.navigate('OrderTracking');
     }
   };
 
