@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: farmers-marketplace-api
+    runtime: node
+    buildCommand: npm install && npx prisma migrate deploy
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+    disk:
+      size: 1GB
+      mountPath: /opt/render/project/uploads
+databases:
+  - name: farmers-marketplace-db
+    engine: postgres
+    plan: free
+    backupRetentionDays: 7

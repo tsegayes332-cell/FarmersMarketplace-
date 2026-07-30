@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -66,8 +67,12 @@ app.get('/', (req, res) => {
 
 // APK Download Route
 app.get('/apk-download', (req, res) => {
-  const apkPath = 'C:\\fmp\\FarmersMarketplace\\android\\app\\build\\outputs\\apk\\release\\app-release.apk';
-  res.download(apkPath, 'app-release.apk');
+  const apkPath = path.join(__dirname, 'uploads', 'app-release.apk');
+  if (fs.existsSync(apkPath)) {
+    res.download(apkPath, 'app-release.apk');
+  } else {
+    res.status(404).json({ error: 'APK not available' });
+  }
 });
 
 // Routes Registration
