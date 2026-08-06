@@ -13,6 +13,7 @@ export default function LoginScreen({ navigation }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     dispatch(clearError());
@@ -40,8 +41,14 @@ export default function LoginScreen({ navigation }) {
         mode="outlined"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={!showPassword}
         style={styles.input}
+        right={
+          <TextInput.Icon
+            icon={showPassword ? 'eye-off' : 'eye'}
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        }
       />
 
       <Button 

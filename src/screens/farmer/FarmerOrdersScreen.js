@@ -59,7 +59,7 @@ export default function FarmerOrdersScreen() {
       <FlatList
         data={filteredOrders}
         keyExtractor={item => item.id.toString()}
-        refreshing={isLoading}
+        refreshing={isLoadingFarmerOrders}
         onRefresh={() => dispatch(fetchFarmerOrders())}
         ListEmptyComponent={isLoadingFarmerOrders ? <ActivityIndicator style={{marginTop: 50}} /> : <Text style={{textAlign: 'center', marginTop: 50}}>{t('order.no_orders')}</Text>}
         renderItem={({ item }) => (

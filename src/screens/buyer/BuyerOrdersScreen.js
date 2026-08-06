@@ -18,7 +18,7 @@ export default function BuyerOrdersScreen({ navigation }) {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const { myOrders, isLoading } = useSelector(state => state.orders);
+  const { myOrders, isLoadingMyOrders: isLoading } = useSelector(state => state.orders);
   const [filter, setFilter] = useState('ALL');
   const [refreshing, setRefreshing] = useState(false);
 
