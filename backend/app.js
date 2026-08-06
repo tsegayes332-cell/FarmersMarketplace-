@@ -37,7 +37,7 @@ const authLimiter = rateLimit({
 // Middlewares
 app.use(helmet());
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*'
+  origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : []
 }));
 app.use('/uploads', express.static('uploads'));
 app.use(express.json({
