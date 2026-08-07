@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: farmers-marketplace-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npx prisma db push
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: UPLOADS_DIR
+        value: /opt/render/project/src/backend/uploads
+    disk:
+      size: 1GB
+      mountPath: /opt/render/project/src/backend/uploads
+databases:
+  - name: farmers-marketplace-db
+    engine: postgres
+    plan: free

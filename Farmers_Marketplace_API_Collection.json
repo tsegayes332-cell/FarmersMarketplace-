@@ -1,0 +1,643 @@
+{
+  "info": {
+    "name": "Farmers Marketplace API",
+    "description": "Complete API collection for Farmers Marketplace including auth, products, orders, payments, messages, reviews, notifications, and admin.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. AUTH",
+      "item": [
+        {
+          "name": "Register - FARMER",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Abebe Farmer\",\n  \"email\": \"abebe.farmer@example.com\",\n  \"phone\": \"0911223344\",\n  \"password\": \"password123\",\n  \"role\": \"FARMER\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register - BUYER",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hanna Buyer\",\n  \"email\": \"hanna.buyer@example.com\",\n  \"phone\": \"0911556677\",\n  \"password\": \"password123\",\n  \"role\": \"BUYER\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register - ADMIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"System Admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/register",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "    pm.collectionVariables.set(\"token\", pm.response.json().token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"abebe.farmer@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/login",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. PRODUCTS",
+      "item": [
+        {
+          "name": "Get All Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products?category=Vegetables&minPrice=10&maxPrice=100&search=Tomato&page=1&limit=10",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "category", "value": "Vegetables" },
+                { "key": "minPrice", "value": "10" },
+                { "key": "maxPrice", "value": "100" },
+                { "key": "search", "value": "Tomato" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful response\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 404]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products", ":id"],
+              "variable": [
+                { "key": "id", "value": "PRODUCT_UUID_HERE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 or 400\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([201, 400, 403]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Fresh Teff", "type": "text" },
+                { "key": "category", "value": "Grains", "type": "text" },
+                { "key": "price", "value": "3500", "type": "text" },
+                { "key": "quantity", "value": "100", "type": "text" },
+                { "key": "description", "value": "High quality white teff directly from farm.", "type": "text" },
+                { "key": "image", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "price", "value": "3400", "type": "text" }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products", ":id"],
+              "variable": [
+                { "key": "id", "value": "PRODUCT_UUID_HERE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "products", ":id"],
+              "variable": [
+                { "key": "id", "value": "PRODUCT_UUID_HERE" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. ORDERS",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_UUID_HERE\",\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "orders"]
+            }
+          }
+        },
+        {
+          "name": "Get My Orders (Buyer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders/my",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "orders", "my"]
+            }
+          }
+        },
+        {
+          "name": "Get Farmer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders/farmer",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "orders", "farmer"]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SHIPPED\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders/:id/status",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "orders", ":id", "status"],
+              "variable": [
+                { "key": "id", "value": "ORDER_UUID_HERE" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Track Order",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders/:id/track",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "orders", ":id", "track"],
+              "variable": [
+                { "key": "id", "value": "ORDER_UUID_HERE" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. PAYMENTS",
+      "item": [
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"ORDER_UUID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/initiate",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "payments", "initiate"]
+            }
+          }
+        },
+        {
+          "name": "Chapa Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "chapa-signature", "value": "YOUR_HASH_HERE" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tx_ref\": \"tx-ORDER_UUID_HERE-123456789\",\n  \"status\": \"success\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/webhook",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "payments", "webhook"]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/:orderId",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "payments", ":orderId"],
+              "variable": [
+                { "key": "orderId", "value": "ORDER_UUID_HERE" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. MESSAGES",
+      "item": [
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/messages/:userId",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "messages", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "TARGET_USER_UUID" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. REVIEWS",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetId\": \"FARMER_OR_TRANSPORTER_UUID\",\n  \"rating\": 5,\n  \"comment\": \"Excellent quality teff and fast delivery!\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Get Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews/:userId",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "reviews", ":userId"],
+              "variable": [
+                { "key": "userId", "value": "FARMER_OR_TRANSPORTER_UUID" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. NOTIFICATIONS",
+      "item": [
+        {
+          "name": "Get My Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/notifications",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/notifications/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "notifications", ":id"],
+              "variable": [
+                { "key": "id", "value": "NOTIFICATION_UUID" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. ADMIN",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/users?role=FARMER",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "users"],
+              "query": [
+                { "key": "role", "value": "FARMER", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Deactivate User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/users/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "users", ":id"],
+              "variable": [
+                { "key": "id", "value": "USER_UUID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Products (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/products",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "products"]
+            }
+          }
+        },
+        {
+          "name": "Remove Product (Hard Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/products/:id",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "products", ":id"],
+              "variable": [
+                { "key": "id", "value": "PRODUCT_UUID" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/reports",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "reports"]
+            }
+          }
+        },
+        {
+          "name": "Get Platform Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/stats",
+              "host": ["{{BASE_URL}}"],
+              "path": ["api", "admin", "stats"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
