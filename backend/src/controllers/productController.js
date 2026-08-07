@@ -24,8 +24,8 @@ const createProduct = async (req, res) => {
     const validatedData = createProductSchema.parse(req.body);
     let imageUrl = null;
     
-    if (req.file && req.file.filename) {
-      imageUrl = 'uploads/' + req.file.filename;
+    if (req.file && req.file.path) {
+      imageUrl = req.file.path;
     }
 
     const newProduct = await prisma.product.create({
@@ -148,8 +148,8 @@ const updateProduct = async (req, res) => {
     }
 
     let imageUrl = product.imageUrl;
-    if (req.file && req.file.filename) {
-      imageUrl = 'uploads/' + req.file.filename;
+    if (req.file && req.file.path) {
+      imageUrl = req.file.path;
     }
 
     const updatedProduct = await prisma.product.update({
