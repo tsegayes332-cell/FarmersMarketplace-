@@ -9,13 +9,19 @@ import { useTranslation } from 'react-i18next';
 
 export default function ChatScreen({ route, navigation }) {
   const { t } = useTranslation();
-  const { partner } = route.params;
   const theme = useTheme();
   const dispatch = useDispatch();
+
+  const rawPartner = route?.params?.partner;
+  const partner = rawPartner || {
+    id: route?.params?.receiverId,
+    name: route?.params?.title || route?.params?.name || 'User'
+  };
   
   const { user } = useSelector(state => state.auth);
   const { messages } = useSelector(state => state.messages);
-  const chatMessages = messages[partner.id] || [];
+  const partnerId = partner?.id;
+  const chatMessages = partnerId ? (messages[partnerId] || []) : [];
 
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
@@ -24,12 +30,17 @@ export default function ChatScreen({ route, navigation }) {
   const { joinRoom, sendMessage, onMessage, isConnected } = useSocket();
 
   useEffect(() => {
-    navigation.setOptions({ title: partner.name });
+    if (!partnerId) {
+      setLoading(false);
+      return;
+    }
+
+    navigation.setOptions({ title: partner.name || 'Chat' });
 
     const loadHistory = async () => {
       try {
-        const history = await messageService.getChatHistory(partner.id);
-        dispatch(setMessages({ partnerId: partner.id, messages: history }));
+        const history = await messageService.getChatHistory(partnerId);
+        dispatch(setMessages({ partnerId, messages: history }));
       } catch (error) {
         console.error('Failed to load chat history', error);
       } finally {
@@ -38,38 +49,60 @@ export default function ChatScreen({ route, navigation }) {
     };
     
     loadHistory();
-    joinRoom(partner.id);
+    joinRoom(partnerId);
 
-    // No need for local onMessage — global handler in RootNavigator adds messages
-    return () => {};
-  }, [partner.id]);
+    const cleanup = onMessage((newMsg) => {
+      // If we receive a message that belongs to this conversation
+      if (newMsg.senderId === partnerId || newMsg.receiverId === partnerId) {
+        dispatch(addMessage({ partnerId, message: newMsg }));
+      }
+    });
+
+    return () => {
+      if (typeof cleanup === 'function') cleanup();
+    };
+  }, [partnerId]);
 
   const handleSend = () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !partnerId) return;
 
     const newMsg = {
       id: Date.now().toString(), // temporary ID
-      senderId: user.id,
-      receiverId: partner.id,
-      content: input,
+      senderId: user?.id,
+      receiverId: partnerId,
+      content: input.trim(),
       createdAt: new Date().toISOString()
     };
 
     // Optimistically add
-    dispatch(addMessage({ partnerId: partner.id, message: newMsg }));
-    sendMessage(partner.id, input);
+    dispatch(addMessage({ partnerId, message: newMsg }));
+    sendMessage(partnerId, input.trim());
     setInput('');
   };
 
   const renderBubble = ({ item }) => {
-    const isMe = item.senderId === user.id;
+    const isMe = item?.senderId === user?.id;
+    let timeStr = '';
+    if (item?.createdAt) {
+      try {
+        const d = new Date(item.createdAt);
+        if (!isNaN(d.getTime())) {
+          timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+      } catch (e) {
+        timeStr = '';
+      }
+    }
+
     return (
       <View style={[styles.bubbleWrapper, isMe ? styles.myBubbleWrapper : styles.theirBubbleWrapper]}>
         <View style={[styles.bubble, isMe ? { backgroundColor: theme.colors.primary } : { backgroundColor: '#E0E0E0' }]}>
-          <Text style={{ color: isMe ? '#FFF' : '#000' }}>{item.content}</Text>
-          <Text style={[styles.timestamp, { color: isMe ? 'rgba(255,255,255,0.7)' : 'gray' }]}>
-            {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </Text>
+          <Text style={{ color: isMe ? '#FFF' : '#000' }}>{item?.content || ''}</Text>
+          {timeStr ? (
+            <Text style={[styles.timestamp, { color: isMe ? 'rgba(255,255,255,0.7)' : 'gray' }]}>
+              {timeStr}
+            </Text>
+          ) : null}
         </View>
       </View>
     );
@@ -78,7 +111,7 @@ export default function ChatScreen({ route, navigation }) {
   return (
     <KeyboardAvoidingView 
       style={{ flex: 1, backgroundColor: theme.colors.background }} 
-      behavior="padding"
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
       {loading ? (
@@ -87,11 +120,18 @@ export default function ChatScreen({ route, navigation }) {
         <FlatList
           ref={flatListRef}
           data={chatMessages}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, idx) => item?.id ? String(item.id) : String(idx)}
           renderItem={renderBubble}
-          contentContainerStyle={{ padding: 15 }}
+          contentContainerStyle={{ padding: 15, flexGrow: 1 }}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
           onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          ListEmptyComponent={
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+              <Text style={{ color: '#9CA3AF', textAlign: 'center' }}>
+                Say hello to start the conversation!
+              </Text>
+            </View>
+          }
         />
       )}
 
@@ -112,7 +152,7 @@ export default function ChatScreen({ route, navigation }) {
           iconColor="#fff"
           size={24}
           onPress={handleSend}
-          disabled={!isConnected || !input.trim()}
+          disabled={!input.trim()}
         />
       </View>
     </KeyboardAvoidingView>
@@ -125,6 +165,6 @@ const styles = StyleSheet.create({
   theirBubbleWrapper: { justifyContent: 'flex-start' },
   bubble: { maxWidth: '75%', padding: 10, borderRadius: 15 },
   timestamp: { fontSize: 10, marginTop: 5, textAlign: 'right' },
-  inputContainer: { flexDirection: 'row', padding: 10, paddingBottom: 50, backgroundColor: '#fff', alignItems: 'center' },
+  inputContainer: { flexDirection: 'row', padding: 10, backgroundColor: '#fff', alignItems: 'center' },
   input: { flex: 1, marginRight: 10, backgroundColor: '#fff' }
 });

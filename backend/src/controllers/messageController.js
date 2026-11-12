@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({});
+const prisma = require('../prisma');
 
 const getChatHistory = async (req, res) => {
   try {
@@ -48,11 +47,13 @@ const getConversations = async (req, res) => {
       const partnerId = msg.senderId === currentUserId ? msg.receiverId : msg.senderId;
       if (!partnerMap[partnerId]) {
         const partner = msg.senderId === currentUserId ? msg.receiver : msg.sender;
+        if (!partner) continue;
         partnerMap[partnerId] = {
           id: partnerId,
-          partner: { id: partner.id, name: partner.name },
+          partner: { id: partner.id, name: partner.name || 'User' },
           lastMessage: msg.content,
-          timestamp: msg.timestamp
+          timestamp: msg.timestamp,
+          unreadCount: 0
         };
       }
     }

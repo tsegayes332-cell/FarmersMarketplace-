@@ -3,21 +3,17 @@ import notificationService from '../api/notificationService';
 import { useSelector } from 'react-redux';
 import { Alert } from 'react-native';
 
-let messaging = null;
-try {
-  messaging = require('@react-native-firebase/messaging').default;
-} catch (e) {
-  console.log('Firebase not available, notifications disabled');
-}
-
 export default function useNotifications() {
   const { token } = useSelector(state => state.auth);
 
   useEffect(() => {
-    if (!token || !messaging) return;
+    if (!token) return;
 
-    const requestUserPermission = async () => {
+    let unsubscribe = null;
+
+    const setupNotifications = async () => {
       try {
+        const messaging = require('@react-native-firebase/messaging').default;
         const authStatus = await messaging().requestPermission();
         const enabled =
           authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -29,25 +25,24 @@ export default function useNotifications() {
             notificationService.registerToken(fcmToken).catch(console.log);
           }
         }
-      } catch (e) {
-        console.log('Firebase permission error:', e);
+
+        unsubscribe = messaging().onMessage(async remoteMessage => {
+          Alert.alert(
+            remoteMessage.notification?.title || 'New Notification', 
+            remoteMessage.notification?.body || ''
+          );
+        });
+      } catch (error) {
+        console.warn('Firebase notifications unavailable (google-services not configured):', error?.message || error);
       }
     };
 
-    requestUserPermission();
+    setupNotifications();
 
-    let unsubscribe = () => {};
-    try {
-      unsubscribe = messaging().onMessage(async remoteMessage => {
-        Alert.alert(
-          remoteMessage.notification?.title || 'New Notification', 
-          remoteMessage.notification?.body || ''
-        );
-      });
-    } catch (e) {
-      console.log('Firebase onMessage error:', e);
-    }
-
-    return unsubscribe;
+    return () => {
+      if (typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, [token]);
 }

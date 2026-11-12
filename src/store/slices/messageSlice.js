@@ -26,7 +26,8 @@ const messageSlice = createSlice({
     },
     markAsRead: (state, action) => {
       const partnerId = action.payload;
-      const convo = state.conversations.find(c => c.partner.id === partnerId);
+      if (!Array.isArray(state.conversations)) return;
+      const convo = state.conversations.find(c => c?.partner?.id === partnerId);
       if (convo && convo.unreadCount > 0) {
         state.unreadCount = Math.max(0, state.unreadCount - convo.unreadCount);
         convo.unreadCount = 0;
@@ -38,8 +39,9 @@ const messageSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchConversations.fulfilled, (state, action) => {
-      state.conversations = action.payload;
-      state.unreadCount = action.payload.reduce((acc, c) => acc + (c.unreadCount || 0), 0);
+      const list = Array.isArray(action.payload) ? action.payload : [];
+      state.conversations = list;
+      state.unreadCount = list.reduce((acc, c) => acc + (c?.unreadCount || 0), 0);
     });
   }
 });

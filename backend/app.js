@@ -8,21 +8,24 @@ const rateLimit = require('express-rate-limit');
 const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Global Rate limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window`
+  max: 200, // Limit each IP to 200 requests per `window`
   standardHeaders: true, 
   legacyHeaders: false, 
+  validate: { xForwardedForHeader: false },
 });
 
 // Auth Route Rate limiter
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: 50,
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { xForwardedForHeader: false },
   handler: (req, res) => {
     const resetTime = req.rateLimit.resetTime;
     const now = Date.now();

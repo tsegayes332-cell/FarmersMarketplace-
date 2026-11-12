@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({});
+const prisma = require('../prisma');
 
 const chatSocket = (io) => {
   io.use((socket, next) => {
@@ -20,14 +19,18 @@ const chatSocket = (io) => {
   io.on('connection', (socket) => {
     console.log(`User connected: ${socket.user.id} (Socket: ${socket.id})`);
 
-    socket.on('join_room', ({ targetUserId }) => {
-      const id1 = socket.user.id;
-      const id2 = targetUserId;
-      // Deterministic room ID ensuring same room regardless of who initiated
+    const handleJoin = (target) => {
+      const targetUserId = typeof target === 'object' ? target?.targetUserId : target;
+      if (!targetUserId) return;
+      const id1 = String(socket.user.id);
+      const id2 = String(targetUserId);
       const roomId = id1 < id2 ? `chat_${id1}_${id2}` : `chat_${id2}_${id1}`;
       socket.join(roomId);
       console.log(`User ${socket.user.id} joined room ${roomId}`);
-    });
+    };
+
+    socket.on('join_room', handleJoin);
+    socket.on('join_chat', handleJoin);
 
     socket.on('send_message', async (data) => {
       try {

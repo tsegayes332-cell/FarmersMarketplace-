@@ -1,8 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
 const crypto = require('crypto');
 const chapaService = require('../services/chapaService');
-
-const prisma = new PrismaClient({});
+const prisma = require('../prisma');
 
 const initiatePayment = async (req, res) => {
   try {

@@ -1,6 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
-const prisma = new PrismaClient({});
+const prisma = require('../prisma');
 
 // Schemas for validation
 const createProductSchema = z.object({
