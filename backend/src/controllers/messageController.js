@@ -65,7 +65,32 @@ const getConversations = async (req, res) => {
   }
 };
 
+const sendMessageHTTP = async (req, res) => {
+  try {
+    const { receiverId, content } = req.body;
+    const senderId = req.user.id;
+
+    if (!receiverId || !content || !content.trim()) {
+      return res.status(400).json({ error: 'receiverId and content are required' });
+    }
+
+    const message = await prisma.message.create({
+      data: {
+        senderId,
+        receiverId,
+        content: content.trim()
+      }
+    });
+
+    res.status(201).json(message);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getChatHistory,
-  getConversations
+  getConversations,
+  sendMessageHTTP
 };
